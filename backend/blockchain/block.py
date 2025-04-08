@@ -87,7 +87,7 @@ class Block:
       - the block must be a valid combination of the block's properties
       """
       if block.last_hash != last_block.hash:
-          raise Exception('The block last_hash must be correct')
+          raise Exception('last_hash must be correct')
 
       if hex_to_binary(block.hash)[0:block.difficulty] != '0' * block.difficulty:
           raise Exception('The proof of work requirement was not met')
