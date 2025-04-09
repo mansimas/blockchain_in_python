@@ -15,6 +15,22 @@ class Blockchain:
   def __repr__(self):
     return f'Blockchain({self.chain})'
   
+  def replace_chain(self, chain):
+    """
+    Replace the current chain with the incoming chain if the following rules apply:
+    1. The incoming chain must be longer than the current chain
+    2. The incoming chain must be valiformatted properly
+    """
+    if len(chain) <= len(self.chain):
+      raise Exception('Incoming chain must be longer than current chain')
+
+    try:
+      Blockchain.is_valid_chain(chain)
+    except Exception as e:
+      raise Exception(f'Invalid incoming chain: {e}')
+
+    self.chain = chain
+  
   @staticmethod
   def is_valid_chain(chain):
     """
@@ -24,7 +40,7 @@ class Blockchain:
     2. Blocks must be formatted correctly
     """
 
-    if chain[0].__dict__ != Block.genesis().__dict__:
+    if chain[0] != Block.genesis():
       raise Exception('Genesis block is not first block in the chain')
 
     for i in range(1, len(chain)):
