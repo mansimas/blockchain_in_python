@@ -26,3 +26,19 @@ def test_is_valid_chain_bad_genesis(blockchain_in_three_blocks):
     blockchain_in_three_blocks.chain[0].hash = 'bad_hash'
     with pytest.raises(Exception, match='Genesis block is not first block in the chain'):
         Blockchain.is_valid_chain(blockchain_in_three_blocks.chain)
+
+def test_replace_chain(blockchain_in_three_blocks):
+    blockchain = Blockchain()
+    blockchain.replace_chain(blockchain_in_three_blocks.chain)
+    assert blockchain.chain == blockchain_in_three_blocks.chain
+
+def test_replace_chain_not_longer(blockchain_in_three_blocks):
+    blockchain = Blockchain()
+    with pytest.raises(Exception, match='Incoming chain must be longer than current chain'):
+        blockchain_in_three_blocks.replace_chain(blockchain.chain)
+
+def test_replace_chain_bad_chain(blockchain_in_three_blocks):
+    blockchain = Blockchain()
+    blockchain_in_three_blocks.chain[1].hash = 'bad_hash'
+    with pytest.raises(Exception, match='Invalid incoming chain'):
+        blockchain.replace_chain(blockchain_in_three_blocks.chain)
