@@ -1,3 +1,18 @@
+## Environment Setup
+
+1. Copy the environment template:
+
+```bash
+cp .env.template .env
+```
+
+2. Edit `.env` and replace the placeholder values with your actual PubNub credentials:
+
+```
+PUBNUB_SUBSCRIBE_KEY=your-actual-subscribe-key
+PUBNUB_PUBLISH_KEY=your-actual-publish-key
+```
+
 **Activate the virtual environment**
 
 ```
