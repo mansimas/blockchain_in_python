@@ -24,7 +24,7 @@ class Blockchain:
     2. Blocks must be formatted correctly
     """
 
-    if chain[0] != Block.genesis():
+    if chain[0].__dict__ != Block.genesis().__dict__:
       raise Exception('Genesis block is not first block in the chain')
 
     for i in range(1, len(chain)):
