@@ -18,7 +18,7 @@ class TransactionPool:
 
     def transaction_data(self):
         """
-        Return the transactions of the transaciton pool represented in their json serialized format
+        Return the transactions of the transaction pool represented in their json serialized format
         """
         return list(
             map(
@@ -26,3 +26,14 @@ class TransactionPool:
                 self.transaction_map.values()
             )
         )
+
+    def clear_blockchain_transaction(self, blockchain):
+        """
+        Clear the transaction pool of any transactions that are already in the blockchain
+        """
+        for block in blockchain.chain:
+            for transaction in block.data:
+                try:
+                    del self.transaction_map[transaction['id']]
+                except KeyError:
+                    pass
