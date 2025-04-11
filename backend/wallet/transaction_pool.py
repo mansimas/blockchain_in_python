@@ -27,7 +27,7 @@ class TransactionPool:
             )
         )
 
-    def clear_blockchain_transaction(self, blockchain):
+    def clear_blockchain_transactions(self, blockchain):
         """
         Clear the transaction pool of any transactions that are already in the blockchain
         """
