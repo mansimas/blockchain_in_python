@@ -67,6 +67,8 @@ class Blockchain:
       last_block = chain[i - 1]
       Block.is_valid_block(last_block, block)
     
+    Blockchain.is_valid_transaction_chain(chain)
+    
   @staticmethod
   def is_valid_transaction_chain(chain):
     """
