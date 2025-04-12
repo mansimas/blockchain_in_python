@@ -76,20 +76,22 @@ class Blockchain:
     """
 
     transaction_ids = set()
-    for block in chain:
-      has_mining_reward = False
-      if transaction.input == MINING_REWARD_INPUT:
-        if has_mining_reward:
-          raise Exception(f'Block contains more than one mining reward. Check block with hash: {block.hash}')
-        has_mining_reward = True
+    has_mining_reward = False
 
+    for block in chain:
       for transaction_json in block.data:
         transaction = Transaction.from_json(transaction_json)
+
+        if transaction.input == MINING_REWARD_INPUT:
+          if has_mining_reward:
+            raise Exception(f'Block contains more than one mining reward. Check block with hash: {block.hash}')
+          has_mining_reward = True
+
         if transaction.id in transaction_ids:
           raise Exception(f'Transaction {transaction.id} appears more than once in the chain')
         transaction_ids.add(transaction.id)
       
-      Transaction.is_valid_transaction(transaction)
+        Transaction.is_valid_transaction(transaction)
 
 def main():
   blockchain = Blockchain()
