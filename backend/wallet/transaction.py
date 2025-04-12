@@ -75,6 +75,11 @@ class Transaction:
         """
         Verify the transaction signature and that the output amounts are valid.
         """
+        if transaction.input == MINING_REWARD_INPUT:
+            if list(transaction.output.values()) != [MINING_REWARD]:
+                raise Exception("Invalid mining reward transaction")
+            return
+
         output_total = sum(transaction.output.values())
         if transaction.input['amount'] != output_total:
             raise Exception("Invalid transaction output values")
