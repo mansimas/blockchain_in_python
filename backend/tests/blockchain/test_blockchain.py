@@ -67,3 +67,13 @@ def test_is_valid_transaction_chain_bad_transaction(blockchain_in_three_blocks):
     blockchain_in_three_blocks.add_block([bad_transaction.to_json()])
     with pytest.raises(Exception):
         Blockchain.is_valid_transaction_chain(blockchain_in_three_blocks.chain)
+
+def test_is_valid_transaction_chain_bad_historic_balance(blockchain_in_three_blocks):
+    wallet = Wallet()
+    bad_transaction = Transaction(wallet, 'recipient', 1)
+    bad_transaction.output[wallet.address] = 9000
+    bad_transaction.input['amount'] = 9001
+    bad_transaction.input['signature'] = wallet.sign(bad_transaction.output)
+    blockchain_in_three_blocks.add_block([bad_transaction.to_json()])
+    with pytest.raises(Exception, match='has an invalid amount'):
+        Blockchain.is_valid_transaction_chain(blockchain_in_three_blocks.chain)

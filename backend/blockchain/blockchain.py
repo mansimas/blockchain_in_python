@@ -1,6 +1,7 @@
 from backend.blockchain.block import Block
 from backend.wallet.transaction import Transaction
 from backend.config import MINING_REWARD_INPUT
+from backend.wallet.wallet import Wallet
 
 class Blockchain:
   """
@@ -76,20 +77,31 @@ class Blockchain:
     """
 
     transaction_ids = set()
-    has_mining_reward = False
 
-    for block in chain:
+    for i in range(len(chain)):
+      block = chain[i]
+      has_mining_reward = False
+
       for transaction_json in block.data:
         transaction = Transaction.from_json(transaction_json)
+
+        if transaction.id in transaction_ids:
+          raise Exception(f'Transaction {transaction.id} appears more than once in the chain')
+        transaction_ids.add(transaction.id)
 
         if transaction.input == MINING_REWARD_INPUT:
           if has_mining_reward:
             raise Exception(f'Block contains more than one mining reward. Check block with hash: {block.hash}')
           has_mining_reward = True
-
-        if transaction.id in transaction_ids:
-          raise Exception(f'Transaction {transaction.id} appears more than once in the chain')
-        transaction_ids.add(transaction.id)
+        else:
+          historic_blockchain = Blockchain()
+          historic_blockchain.chain = chain[0:i]
+          historic_balance = Wallet.calculate_balance(
+            historic_blockchain,
+            transaction.input['address']
+          )
+          if historic_balance != transaction.input['amount']:
+            raise Exception(f'Transaction {transaction.id} has an invalid amount. Check block with hash: {block.hash}')
       
         Transaction.is_valid_transaction(transaction)
 
