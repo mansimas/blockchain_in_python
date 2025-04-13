@@ -8,11 +8,6 @@ body {
   word-wrap: break-word;
 }
 
-.logo {
-  width: 250px;
-  height: 250px;
-}
-
 .App {
   display: flex;
   flex-direction: column;
