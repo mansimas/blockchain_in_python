@@ -67,6 +67,10 @@ def route_known_addresses():
             knwon_addresses.update(transaction['output'].keys())
     return jsonify(list(knwon_addresses))
 
+@app.route('/transactions')
+def route_transactions():
+    return jsonify(transaction_pool.transaction_data())
+
 ROOT_PORT = 5000
 PORT = ROOT_PORT
 
@@ -86,6 +90,10 @@ if os.environ.get('SEED') == 'True':
             Transaction(Wallet(), Wallet().address, random.randint(2, 50)).to_json(),
             Transaction(Wallet(), Wallet().address, random.randint(2, 50)).to_json(),
         ])
+    for i in range(3):
+        transaction_pool.set_transaction(
+            Transaction(Wallet(), Wallet().address, random.randint(2, 50))
+        )
 
 
 app.run(port=PORT)
