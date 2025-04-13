@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 
 function ConductTransaction() {
   const [amount, setAmount] = useState(0);
   const [recipient, setRecipient] = useState("");
   const [knownAddresses, setKnownAddresses] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/known-addresses`)
@@ -30,8 +31,7 @@ function ConductTransaction() {
     })
       .then((r) => r.json())
       .then((json) => {
-        console.log(json);
-        alert("Success!");
+        navigate("/transaction-pool");
       });
   };
 
