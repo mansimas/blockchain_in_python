@@ -24,9 +24,10 @@ def route_blockchain():
 
 @app.route('/blockchain/mine')
 def route_blockchain_mine():
-    tranasction_data = transaction_pool.transaction_data()
-    tranasction_data.append(Transaction.reward_transaction(wallet).to_json())
-    blockchain.add_block(tranasction_data)
+    transaction_data = transaction_pool.transaction_data()
+    transaction_data.append(Transaction.reward_transaction(wallet).to_json())
+
+    blockchain.add_block(transaction_data)
     block = blockchain.chain[-1]
     pubsub.broadcast_block(block)
     transaction_pool.clear_blockchain_transactions(blockchain)
@@ -40,8 +41,7 @@ def route_wallet_transact():
         transaction.update(wallet, transaction_data['recipient'], transaction_data['amount'])
     else:
         transaction = Transaction(wallet, transaction_data['recipient'], transaction_data['amount'])
-        # transaction_pool.set_transaction(transaction)
-    
+
     pubsub.broadcast_transaction(transaction)
     return jsonify(transaction.to_json())
 
@@ -61,5 +61,13 @@ if os.environ.get('PEER') == 'True':
         print(f'\n -- Successfully replaced the local chain with the chain from peer')
     except Exception as e:
         print(f'\n -- Failed to replace chain: {e}')
+
+if os.environ.get('SEED') == 'True':
+    for i in range(10):
+        blockchain.add_block([
+            Transaction(Wallet(), Wallet().address, random.randint(2, 50)).to_json(),
+            Transaction(Wallet(), Wallet().address, random.randint(2, 50)).to_json(),
+        ])
+
 
 app.run(port=PORT)
