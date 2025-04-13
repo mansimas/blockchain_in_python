@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FormGroup, FormControl, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 
 function ConductTransaction() {
@@ -29,6 +30,8 @@ function ConductTransaction() {
 
   return (
     <div className="ConductTransaction">
+      <Link to="/">Home</Link>
+      <hr />
       <h3>Conduct a Transaction</h3>
       <br />
       <FormGroup>

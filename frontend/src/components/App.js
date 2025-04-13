@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
   return (
     <div className="App">
       <h3>Welcome to pychain</h3>
+      <br />
+      <Link to="/blockchain">Blockchain</Link>
+      <Link to="/conduct-transaction">Conduct a Transaction</Link>
       <br />
       <div className="WalletInfo">
         <div>Address: {address}</div>
